@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import eoen.jwtroles.entities.JwtRequest;
-import eoen.jwtroles.entities.JwtResponse;
+import eoen.jwtroles.dtos.JwtRequestDTO;
+import eoen.jwtroles.dtos.JwtResponseDTO;
 import eoen.jwtroles.entities.User;
 import eoen.jwtroles.repositories.UserRepository;
 import eoen.jwtroles.util.JwtUtil;
@@ -34,7 +34,7 @@ public class JwtService implements UserDetailsService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception {
+    public JwtResponseDTO createJwtToken(JwtRequestDTO jwtRequest) throws Exception {
         String userName = jwtRequest.getUserName();
         String userPassword = jwtRequest.getUserPassword();
         authenticate(userName, userPassword);
@@ -43,7 +43,7 @@ public class JwtService implements UserDetailsService {
         String newGeneratedToken = jwtUtil.generateToken(userDetails);
 
         User user = userDao.findById(userName).get();
-        return new JwtResponse(user, newGeneratedToken);
+        return new JwtResponseDTO(user, newGeneratedToken);
     }
 
     @Override

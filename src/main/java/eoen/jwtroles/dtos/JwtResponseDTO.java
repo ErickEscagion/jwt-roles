@@ -1,11 +1,13 @@
-package eoen.jwtroles.entities;
+package eoen.jwtroles.dtos;
 
-public class JwtResponse {
+import eoen.jwtroles.entities.User;
+
+public class JwtResponseDTO {
 
     private User user;
     private String jwtToken;
 
-    public JwtResponse(User user, String jwtToken) {
+    public JwtResponseDTO(User user, String jwtToken) {
         this.user = user;
         this.jwtToken = jwtToken;
     }

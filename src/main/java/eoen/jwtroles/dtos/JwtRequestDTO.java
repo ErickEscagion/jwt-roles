@@ -1,6 +1,6 @@
-package eoen.jwtroles.entities;
+package eoen.jwtroles.dtos;
 
-public class JwtRequest {
+public class JwtRequestDTO {
 
     private String userName;
     private String userPassword;
