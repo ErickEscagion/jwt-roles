@@ -5,6 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import eoen.jwtroles.entities.User;
@@ -13,6 +14,7 @@ import eoen.jwtroles.services.UserService;
 import javax.annotation.PostConstruct;
 
 @RestController
+@RequestMapping("v1/user")
 public class UserController {
 
     @Autowired
@@ -23,7 +25,7 @@ public class UserController {
         userService.initRoleAndUser();
     }
 
-    @PostMapping({"/registerNewUser"})
+    @PostMapping({"/postUser"})
     public User registerNewUser(@RequestBody User user) {
         return userService.registerNewUser(user);
     }
