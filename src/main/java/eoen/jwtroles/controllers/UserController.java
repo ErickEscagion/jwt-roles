@@ -1,6 +1,7 @@
 package eoen.jwtroles.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,7 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import eoen.jwtroles.dtos.UserRequestDTO;
+import eoen.jwtroles.dtos.UserResponseDTO;
 import eoen.jwtroles.entities.User;
+import eoen.jwtroles.mappers.UserMapper;
 import eoen.jwtroles.services.UserService;
 
 import javax.annotation.PostConstruct;
@@ -26,8 +30,9 @@ public class UserController {
     }
 
     @PostMapping({"/postUser"})
-    public User registerNewUser(@RequestBody User user) {
-        return userService.registerNewUser(user);
+    public ResponseEntity<UserResponseDTO> registerNewUser(@RequestBody UserRequestDTO dto) {
+        User userSaved = userService.registerNewUser(UserMapper.fromDtoToUser(dto));
+		return ResponseEntity.ok(UserMapper.fromUserToResponse(userSaved));
     }
 
     @GetMapping({"/forAdmin"})

@@ -59,13 +59,14 @@ public class UserService {
     }
 
     public User registerNewUser(User user) {
+
         Role role = roleRepository.findById("User").get();
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(role);
         user.setRole(userRoles);
-        user.setUserPassword(getEncodedPassword(user.getUserPassword()));
-
-        return userRepository.save(user);
+        
+        User userSaved = userRepository.save(user);
+        return userSaved;
     }
 
     public String getEncodedPassword(String password) {
