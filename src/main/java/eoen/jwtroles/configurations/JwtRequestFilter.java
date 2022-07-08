@@ -1,4 +1,4 @@
-package eoen.jwtroles.configuration;
+package eoen.jwtroles.configurations;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import eoen.jwtroles.service.JwtService;
+import eoen.jwtroles.services.JwtService;
 import eoen.jwtroles.util.JwtUtil;
 
 import javax.servlet.FilterChain;

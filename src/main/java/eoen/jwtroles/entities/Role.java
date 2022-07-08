@@ -1,4 +1,4 @@
-package eoen.jwtroles.entity;
+package eoen.jwtroles.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

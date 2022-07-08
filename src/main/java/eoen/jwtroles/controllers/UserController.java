@@ -1,4 +1,4 @@
-package eoen.jwtroles.controller;
+package eoen.jwtroles.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import eoen.jwtroles.entity.User;
-import eoen.jwtroles.service.UserService;
+import eoen.jwtroles.entities.User;
+import eoen.jwtroles.services.UserService;
 
 import javax.annotation.PostConstruct;
 

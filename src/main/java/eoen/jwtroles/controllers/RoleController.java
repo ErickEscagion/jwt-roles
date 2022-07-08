@@ -1,4 +1,4 @@
-package eoen.jwtroles.controller;
+package eoen.jwtroles.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import eoen.jwtroles.entity.Role;
-import eoen.jwtroles.service.RoleService;
+import eoen.jwtroles.entities.Role;
+import eoen.jwtroles.services.RoleService;
 
 @RestController
 public class RoleController {

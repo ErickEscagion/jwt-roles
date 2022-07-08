@@ -1,4 +1,4 @@
-package eoen.jwtroles.controller;
+package eoen.jwtroles.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import eoen.jwtroles.entity.JwtRequest;
-import eoen.jwtroles.entity.JwtResponse;
-import eoen.jwtroles.service.JwtService;
+import eoen.jwtroles.entities.JwtRequest;
+import eoen.jwtroles.entities.JwtResponse;
+import eoen.jwtroles.services.JwtService;
 
 @RestController
 @CrossOrigin

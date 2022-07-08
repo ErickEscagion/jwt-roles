@@ -1,4 +1,4 @@
-package eoen.jwtroles.service;
+package eoen.jwtroles.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,10 +12,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import eoen.jwtroles.dao.UserDao;
-import eoen.jwtroles.entity.JwtRequest;
-import eoen.jwtroles.entity.JwtResponse;
-import eoen.jwtroles.entity.User;
+import eoen.jwtroles.entities.JwtRequest;
+import eoen.jwtroles.entities.JwtResponse;
+import eoen.jwtroles.entities.User;
+import eoen.jwtroles.repositories.UserRepository;
 import eoen.jwtroles.util.JwtUtil;
 
 import java.util.Collection;
@@ -29,7 +29,7 @@ public class JwtService implements UserDetailsService {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userDao;
 
     @Autowired
     private AuthenticationManager authenticationManager;

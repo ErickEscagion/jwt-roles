@@ -1,4 +1,4 @@
-package eoen.jwtroles.configuration;
+package eoen.jwtroles.configurations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

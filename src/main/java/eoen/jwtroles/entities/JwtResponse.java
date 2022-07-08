@@ -1,4 +1,4 @@
-package eoen.jwtroles.entity;
+package eoen.jwtroles.entities;
 
 public class JwtResponse {
 

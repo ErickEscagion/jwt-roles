@@ -1,4 +1,4 @@
-package eoen.jwtroles.entity;
+package eoen.jwtroles.entities;
 
 import javax.persistence.*;
 import java.util.Set;

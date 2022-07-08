@@ -1,13 +1,13 @@
-package eoen.jwtroles.service;
+package eoen.jwtroles.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import eoen.jwtroles.dao.RoleDao;
-import eoen.jwtroles.dao.UserDao;
-import eoen.jwtroles.entity.Role;
-import eoen.jwtroles.entity.User;
+import eoen.jwtroles.entities.Role;
+import eoen.jwtroles.entities.User;
+import eoen.jwtroles.repositories.RoleRepository;
+import eoen.jwtroles.repositories.UserRepository;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,10 +16,10 @@ import java.util.Set;
 public class UserService {
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userDao;
 
     @Autowired
-    private RoleDao roleDao;
+    private RoleRepository roleDao;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
