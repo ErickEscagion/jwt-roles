@@ -37,6 +37,7 @@ public class UserService {
         roleRepository.save(userRole);
 
         User adminUser = new User();
+        adminUser.setUserId(1l);
         adminUser.setUserName("admin");
         adminUser.setUserPassword(getEncodedPassword("senha123"));
         adminUser.setUserFirstName("adminFistName");
@@ -48,6 +49,7 @@ public class UserService {
         userRepository.save(adminUser);
 
         User user = new User();
+        user.setUserId(2l);
         user.setUserName("user");
         user.setUserPassword(getEncodedPassword("senha123"));
         user.setUserFirstName("userFistName");
@@ -60,7 +62,7 @@ public class UserService {
 
     public User registerNewUser(User user) {
 
-        Role role = roleRepository.findById("User").get();
+        Role role = roleRepository.findByRolename("User").get();
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(role);
         user.setRole(userRoles);

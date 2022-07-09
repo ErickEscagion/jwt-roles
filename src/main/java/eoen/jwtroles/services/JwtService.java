@@ -29,7 +29,7 @@ public class JwtService implements UserDetailsService {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private UserRepository userDao;
+    private UserRepository userService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -42,13 +42,13 @@ public class JwtService implements UserDetailsService {
         UserDetails userDetails = loadUserByUsername(userName);
         String newGeneratedToken = jwtUtil.generateToken(userDetails);
 
-        User user = userDao.findById(userName).get();
+        User user = userService.findByUsername(userName).get();
         return new JwtResponseDTO(user, newGeneratedToken);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDao.findById(username).get();
+        User user = userService.findByUsername(username).get();
 
         if (user != null) {
             return new org.springframework.security.core.userdetails.User(

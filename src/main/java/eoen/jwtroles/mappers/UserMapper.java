@@ -14,7 +14,7 @@ public class UserMapper {
 	}
 
 	public static User fromDtoToUser(UserRequestDTO dto) {	
-		return new User(dto.getUserName(), dto.getUserFirstName(), dto.getUserLastName(), new BCryptPasswordEncoder().encode(dto.getUserPassword()),null);
+		return new User(null,dto.getUserName(), dto.getUserFirstName(), dto.getUserLastName(), new BCryptPasswordEncoder().encode(dto.getUserPassword()),null);
 	}
 
 }

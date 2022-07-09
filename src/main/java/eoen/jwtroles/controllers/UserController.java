@@ -24,6 +24,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    
     @PostConstruct
     public void initRoleAndUser() {
         userService.initRoleAndUser();
