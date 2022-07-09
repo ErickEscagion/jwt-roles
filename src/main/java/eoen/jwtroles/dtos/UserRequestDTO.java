@@ -1,11 +1,12 @@
 package eoen.jwtroles.dtos;
 
+import javax.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Id;
 
 @Getter
 @Setter
@@ -13,7 +14,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 public class UserRequestDTO {
 
-    @Id
+    @Column(unique = true)
     private String userName;
     private String userFirstName;
     private String userLastName;
