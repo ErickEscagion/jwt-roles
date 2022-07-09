@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import eoen.jwtroles.dtos.JwtRequestDTO;
 import eoen.jwtroles.dtos.JwtResponseDTO;
 import eoen.jwtroles.entities.User;
+import eoen.jwtroles.mappers.UserMapper;
 import eoen.jwtroles.repositories.UserRepository;
 import eoen.jwtroles.util.JwtUtil;
 
@@ -43,7 +44,7 @@ public class JwtService implements UserDetailsService {
         String newGeneratedToken = jwtUtil.generateToken(userDetails);
 
         User user = userService.findByUsername(userName).get();
-        return new JwtResponseDTO(user, newGeneratedToken);
+        return new JwtResponseDTO(UserMapper.fromUserToResponse(user), newGeneratedToken);
     }
 
     @Override

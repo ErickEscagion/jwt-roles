@@ -1,6 +1,5 @@
 package eoen.jwtroles.dtos;
 
-import eoen.jwtroles.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class JwtResponseDTO {
 
-    private User user;
+    private UserResponseDTO user;
     private String jwtToken;
 
 }
