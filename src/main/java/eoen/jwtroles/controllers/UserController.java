@@ -24,15 +24,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    
     @PostConstruct
     public void initRoleAndUser() {
         userService.initRoleAndUser();
     }
 
     @PostMapping({"/postUser"})
-    public ResponseEntity<UserResponseDTO> registerNewUser(@RequestBody UserRequestDTO dto) {
-        User userSaved = userService.registerNewUser(UserMapper.fromDtoToUser(dto));
+    public ResponseEntity<UserResponseDTO> postNewUser(@RequestBody UserRequestDTO dto) {
+        User userSaved = userService.postNewUser(UserMapper.fromDtoToUser(dto));
 		return ResponseEntity.ok(UserMapper.fromUserToResponse(userSaved));
     }
 

@@ -12,7 +12,7 @@ public class RoleService {
     @Autowired
     private RoleRepository roleDao;
 
-    public Role createNewRole(Role role) {
+    public Role postNewRole(Role role) {
         return roleDao.save(role);
     }
 }

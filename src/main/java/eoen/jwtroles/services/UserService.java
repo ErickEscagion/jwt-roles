@@ -62,7 +62,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User registerNewUser(User user) {
+    public User postNewUser(User user) {
 
         Role role = roleRepository.findByRolename("User").get();
         Set<Role> userRoles = new HashSet<>();
