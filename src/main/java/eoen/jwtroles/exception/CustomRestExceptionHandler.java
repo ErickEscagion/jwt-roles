@@ -25,6 +25,13 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     @Autowired
     private MessageSource messageSource;
 
+    @ExceptionHandler({ EntityNotFoundException.class })
+    public ResponseEntity<ErrorsDTO> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
+        String error = "Resource not found!";
+        ErrorsDTO apiError = new ErrorsDTO(error, ex.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<ErrorsDTO>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
     @ExceptionHandler({ BdException.class })
     public ResponseEntity<ErrorsDTO> handleBdException(BdException ex, WebRequest request) {
         String error = "Argument not valid!";
