@@ -6,10 +6,13 @@ import org.springframework.stereotype.Service;
 
 import eoen.jwtroles.entities.Role;
 import eoen.jwtroles.entities.User;
+import eoen.jwtroles.exception.BdException;
+import eoen.jwtroles.exception.ProgramException;
 import eoen.jwtroles.repositories.RoleRepository;
 import eoen.jwtroles.repositories.UserRepository;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -64,7 +67,13 @@ public class UserService {
 
     public User postNewUser(User user) {
 
-        Role role = roleRepository.findByRolename("User").get();
+        Optional<User> userActive = userRepository.findByUsername(user.getUserName());
+		if (userActive.isPresent())
+			throw new BdException("userName already exists without bd!");
+        Optional<Role> roleActive = roleRepository.findByRolename("User");
+        if (!roleActive.isPresent())
+			throw new ProgramException("User role not registered, please register!");
+        Role role = roleActive.get();
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(role);
         user.setRole(userRoles);

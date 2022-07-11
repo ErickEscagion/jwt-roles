@@ -16,6 +16,7 @@ import eoen.jwtroles.mappers.UserMapper;
 import eoen.jwtroles.services.UserService;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("v1/user")
@@ -30,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping({"/postUser"})
-    public ResponseEntity<UserResponseDTO> postNewUser(@RequestBody UserRequestDTO dto) {
+    public ResponseEntity<UserResponseDTO> postNewUser(@Valid @RequestBody UserRequestDTO dto) {
         User userSaved = userService.postNewUser(UserMapper.fromDtoToUser(dto));
 		return ResponseEntity.ok(UserMapper.fromUserToResponse(userSaved));
     }
