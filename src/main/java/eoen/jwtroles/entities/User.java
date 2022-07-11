@@ -41,7 +41,7 @@ public class User {
 
     @NotBlank(message = "userPassword must not be blank!")
     @NotNull(message = "userPassword must not be null!")
-    @Size(min = 5, message = "userPassword size must be at least 2")
+    @Size(min = 5, message = "userPassword size must be at least 5")
     private String userPassword;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
