@@ -1,12 +1,15 @@
 package eoen.jwtroles.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import eoen.jwtroles.entities.Role;
 import eoen.jwtroles.entities.User;
 import eoen.jwtroles.exception.BdException;
+import eoen.jwtroles.exception.EntityNotFoundException;
 import eoen.jwtroles.exception.ProgramException;
 import eoen.jwtroles.repositories.RoleRepository;
 import eoen.jwtroles.repositories.UserRepository;
@@ -84,5 +87,25 @@ public class UserService {
 
     public String getEncodedPassword(String password) {
         return passwordEncoder.encode(password);
+    }
+
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    public User getUserById(Long id) {
+        Optional<User> optional = userRepository.findById(id);
+        if (optional.isEmpty()) {
+            throw new EntityNotFoundException("User Not Found!");
+        }
+        return optional.get();
+    }
+
+    public User getUserByUserName(String userName) {
+        Optional<User> optional = userRepository.findByUsername(userName);
+        if (optional.isEmpty()) {
+            throw new EntityNotFoundException("User Not Found!");
+        }
+        return optional.get();
     }
 }
