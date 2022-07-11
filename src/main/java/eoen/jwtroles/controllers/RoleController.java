@@ -1,5 +1,7 @@
 package eoen.jwtroles.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +25,7 @@ public class RoleController {
 
     @PostMapping()
     @PreAuthorize("hasRole('Admin')")
-    public ResponseEntity<RoleResponseDTO> postNewRole(@RequestBody RoleRequestDTO dto) {
+    public ResponseEntity<RoleResponseDTO> postNewRole(@Valid @RequestBody RoleRequestDTO dto) {
         Role roleSaved = roleService.postNewRole(RoleMapper.fromDtoToRole(dto));
 		return ResponseEntity.ok(RoleMapper.fromRoleToResponse(roleSaved));
     }
