@@ -1,6 +1,7 @@
 package eoen.jwtroles.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,9 @@ public class JwtController {
     private JwtService jwtService;
 
     @PostMapping({"/authenticate"})
-    public JwtResponseDTO createJwtToken(@RequestBody JwtRequestDTO jwtRequest) throws Exception {
-        return jwtService.createJwtToken(jwtRequest);
+    public ResponseEntity<JwtResponseDTO> createJwtToken(@RequestBody JwtRequestDTO jwtRequest) throws Exception {
+       
+        JwtResponseDTO jwtResponse = jwtService.createJwtToken(jwtRequest);
+        return ResponseEntity.ok(jwtResponse);
     }
 }
