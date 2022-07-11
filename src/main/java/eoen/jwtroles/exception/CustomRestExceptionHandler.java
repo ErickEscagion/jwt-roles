@@ -25,6 +25,13 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     @Autowired
     private MessageSource messageSource;
 
+    @ExceptionHandler({ PasswordException.class })
+    public ResponseEntity<ErrorsDTO> handlePasswordException(PasswordException ex, WebRequest request) {
+        String error = "Password Invalid!";
+        ErrorsDTO apiError = new ErrorsDTO(error, ex.getMessage(), HttpStatus.valueOf(401));
+        return new ResponseEntity<ErrorsDTO>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
     @ExceptionHandler({ EntityNotFoundException.class })
     public ResponseEntity<ErrorsDTO> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
         String error = "Resource not found!";

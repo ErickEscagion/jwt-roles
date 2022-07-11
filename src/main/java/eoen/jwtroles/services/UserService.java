@@ -10,6 +10,7 @@ import eoen.jwtroles.entities.Role;
 import eoen.jwtroles.entities.User;
 import eoen.jwtroles.exception.BdException;
 import eoen.jwtroles.exception.EntityNotFoundException;
+import eoen.jwtroles.exception.PasswordException;
 import eoen.jwtroles.exception.ProgramException;
 import eoen.jwtroles.repositories.RoleRepository;
 import eoen.jwtroles.repositories.UserRepository;
@@ -107,5 +108,12 @@ public class UserService {
             throw new EntityNotFoundException("User Not Found!");
         }
         return optional.get();
+    }
+
+    public void checkUserPassword(User user, String password){
+        if(!passwordEncoder.matches(password, user.getUserPassword())){
+            throw new PasswordException("Password does not match!");
+        }
+        return;
     }
 }

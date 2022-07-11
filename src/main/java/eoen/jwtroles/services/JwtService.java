@@ -16,7 +16,6 @@ import eoen.jwtroles.dtos.JwtRequestDTO;
 import eoen.jwtroles.dtos.JwtResponseDTO;
 import eoen.jwtroles.entities.User;
 import eoen.jwtroles.mappers.UserMapper;
-import eoen.jwtroles.repositories.UserRepository;
 import eoen.jwtroles.util.JwtUtil;
 
 import java.util.Collection;
@@ -30,7 +29,7 @@ public class JwtService implements UserDetailsService {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private UserRepository userService;
+    private UserService userService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -38,18 +37,20 @@ public class JwtService implements UserDetailsService {
     public JwtResponseDTO createJwtToken(JwtRequestDTO jwtRequest) throws Exception {
         String userName = jwtRequest.getUserName();
         String userPassword = jwtRequest.getUserPassword();
+        User user = userService.getUserByUserName(userName);
+        userService.checkUserPassword(user, userPassword);
+
         authenticate(userName, userPassword);
 
         UserDetails userDetails = loadUserByUsername(userName);
         String newGeneratedToken = jwtUtil.generateToken(userDetails);
 
-        User user = userService.findByUsername(userName).get();
         return new JwtResponseDTO(UserMapper.fromUserToResponse(user), newGeneratedToken);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.findByUsername(username).get();
+        User user = userService.getUserByUserName(username);
 
         if (user != null) {
             return new org.springframework.security.core.userdetails.User(
