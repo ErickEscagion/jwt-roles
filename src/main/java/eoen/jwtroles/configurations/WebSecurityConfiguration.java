@@ -49,6 +49,7 @@ public class WebSecurityConfiguration {
         httpSecurity.csrf().disable()
                 .authorizeRequests().antMatchers("/v1/authenticate", "/v1/user/postUser").permitAll()
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
+                .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .authenticationManager(getAuthenticationManager(httpSecurity))
