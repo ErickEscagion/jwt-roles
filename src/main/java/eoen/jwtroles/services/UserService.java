@@ -127,7 +127,6 @@ public class UserService {
         Set<Role> roles = userLogged.getRole();
         Boolean isAdmin = false;
         for (Role role : roles) {
-            System.out.println(role.getRoleName());
             if (role.getRoleName().equals("Admin")){
                 isAdmin = true;
             }

@@ -45,7 +45,6 @@ public class RoleService {
 
     public void deleteRole(Long id) {
         Role baseRole = getRoleById(id);
-        System.out.println(baseRole);
         if (roleInUse(baseRole)) {
             throw new BdException("Role In Use!");
         } else {
