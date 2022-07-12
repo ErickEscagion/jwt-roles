@@ -1,11 +1,18 @@
 package eoen.jwtroles.dtos;
 
-import javax.persistence.Column;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import eoen.jwtroles.entities.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,5 +45,16 @@ public class UserRequestDTO {
     @NotNull(message = "userPassword must not be null!")
     @Size(min = 5, message = "userPassword size must be at least 2")
     private String userPassword;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "USER_ROLE",
+            joinColumns = {
+                    @JoinColumn(name = "USER_ID")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "ROLE_ID")
+            }
+    )
+    private Set<Role> role;
 
 }

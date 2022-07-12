@@ -3,6 +3,8 @@ package eoen.jwtroles.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -72,16 +74,16 @@ public class UserService {
     public User postNewUser(User user) {
 
         Optional<User> userActive = userRepository.findByUsername(user.getUserName());
-		if (userActive.isPresent())
-			throw new BdException("userName already exists without bd!");
+        if (userActive.isPresent())
+            throw new BdException("userName already exists without bd!");
         Optional<Role> roleActive = roleRepository.findByRolename("User");
         if (!roleActive.isPresent())
-			throw new ProgramException("User role not registered, please register!");
+            throw new ProgramException("User role not registered, please register!");
         Role role = roleActive.get();
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(role);
         user.setRole(userRoles);
-        
+
         User userSaved = userRepository.save(user);
         return userSaved;
     }
@@ -110,10 +112,37 @@ public class UserService {
         return optional.get();
     }
 
-    public void checkUserPassword(User user, String password){
-        if(!passwordEncoder.matches(password, user.getUserPassword())){
+    public void checkUserPassword(User user, String password) {
+        if (!passwordEncoder.matches(password, user.getUserPassword())) {
             throw new PasswordException("Password does not match!");
         }
         return;
+    }
+
+    public User updateUser(User user, Long id, String password) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userName = ((UserDetails) principal).getUsername();
+        User userLogged = getUserByUserName(userName);
+
+        Set<Role> roles = userLogged.getRole();
+        Boolean isAdmin = false;
+        for (Role role : roles) {
+            System.out.println(role.getRoleName());
+            if (role.getRoleName().equals("Admin")){
+                isAdmin = true;
+            }
+
+        }
+        if (!isAdmin) {
+            checkUserPassword(user, password);
+            if(userLogged.getUserId() != id)
+                throw new BdException("You can only change your own profile!");
+        }
+        User userBase = this.getUserById(id);
+        user.setUserId(userBase.getUserId());
+        Optional<User> userActive = userRepository.findByUsername(user.getUserName());
+        if (userActive.isPresent() && userBase.getUserName() != userActive.get().getUserName())
+            throw new BdException("Username already exists without bd!");
+        return userRepository.save(user);
     }
 }
