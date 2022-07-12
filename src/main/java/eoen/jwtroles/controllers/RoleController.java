@@ -56,7 +56,7 @@ public class RoleController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<RoleResponseDTO> updateRole(@RequestBody RoleRequestDTO dto,
+	public ResponseEntity<RoleResponseDTO> updateRole(@Valid @RequestBody RoleRequestDTO dto,
 			@PathVariable Long id) {
 		try {
 			Role role = roleService.updateRole(RoleMapper.fromDtoToRole(dto), id);
