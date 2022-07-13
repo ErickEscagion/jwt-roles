@@ -1,6 +1,5 @@
 package eoen.jwtroles.dtos;
 
-import eoen.jwtroles.entities.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +16,5 @@ public class UserResponseDTO {
     private String userName;
     private String userFirstName;
     private String userLastName;
-    private Set<Role> role;
+    private Set<RoleResponseDTO> role;
 }

@@ -13,7 +13,7 @@ public class UserMapper {
     
 	
     public static UserResponseDTO fromUserToResponse(User user) {
-		return new UserResponseDTO(user.getUserName(), user.getUserFirstName(), user.getUserLastName(), user.getRole());
+		return new UserResponseDTO(user.getUserName(), user.getUserFirstName(), user.getUserLastName(), RoleMapper.fromRoleToResponse(user.getRole()));
 	}
 
 	public static User fromDtoToUser(UserRequestDTO dto, Set<Role> roles) {	
