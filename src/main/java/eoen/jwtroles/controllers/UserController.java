@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,10 +47,22 @@ public class UserController {
 		return ResponseEntity.ok(UserMapper.fromUserToResponse(userSaved));
 	}
 
-	@GetMapping
+	@GetMapping()
 	@PreAuthorize("hasRole('Admin')")
-	public ResponseEntity<Page<UserResponseDTO>> getAllUsers(@PageableDefault Pageable pageable) {
-		return ResponseEntity.ok(userService.getAllUsers(pageable).map(UserMapper::fromUserToResponse));
+	public ResponseEntity<Page<UserResponseDTO>> getUsers(@PageableDefault Pageable pageable) {
+		return ResponseEntity.ok(userService.getUsers(pageable).map(UserMapper::fromUserToResponse));
+	}
+
+	@GetMapping({"/active"})
+	@PreAuthorize("hasRole('Admin')")
+	public ResponseEntity<Page<UserResponseDTO>> getActiveUsers(@PageableDefault Pageable pageable) {
+		return ResponseEntity.ok(userService.getActiveUsers(pageable).map(UserMapper::fromUserToResponse));
+	}
+
+	@GetMapping({"/disabled"})
+	@PreAuthorize("hasRole('Admin')")
+	public ResponseEntity<Page<UserResponseDTO>> getDisabledUsers(@PageableDefault Pageable pageable) {
+		return ResponseEntity.ok(userService.getDisabledUsers(pageable).map(UserMapper::fromUserToResponse));
 	}
 
 	@GetMapping("{id}")
@@ -81,5 +94,17 @@ public class UserController {
 		} catch (RuntimeException ex) {
 			throw new BdException(ex.getMessage());
 		}
+	}
+
+	@DeleteMapping("{id}")
+	public ResponseEntity<UserResponseDTO> disabledUser(@PathVariable Long id) {
+		userService.disabledUser(id);
+		return ResponseEntity.ok().build();
+	}
+
+	@DeleteMapping("/active/{id}")
+	public ResponseEntity<UserResponseDTO> activeUser(@PathVariable Long id) {
+		userService.activeUser(id);
+		return ResponseEntity.ok().build();
 	}
 }

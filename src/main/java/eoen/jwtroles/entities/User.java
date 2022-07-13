@@ -55,4 +55,6 @@ public class User {
     )
     private Set<Role> role;
 
+    private Boolean active;
+
 }

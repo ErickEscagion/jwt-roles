@@ -2,6 +2,7 @@ package eoen.jwtroles.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +18,9 @@ import eoen.jwtroles.exception.ProgramException;
 import eoen.jwtroles.repositories.RoleRepository;
 import eoen.jwtroles.repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -60,6 +63,7 @@ public class UserService {
         adminRoles.add(adminRole);
         adminRoles.add(userRole);
         adminUser.setRole(adminRoles);
+        adminUser.setActive(true);
         userRepository.save(adminUser);
 
         User user = new User();
@@ -68,6 +72,7 @@ public class UserService {
         user.setUserPassword(getEncodedPassword("senha123"));
         user.setUserFirstName("userFistName");
         user.setUserLastName("userFistName");
+        user.setActive(true);
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(userRole);
         user.setRole(userRoles);
@@ -95,13 +100,33 @@ public class UserService {
         return passwordEncoder.encode(password);
     }
 
-    public Page<User> getAllUsers(Pageable pageable) {
+    public Page<User> getUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
+    }
+
+    public Page<User> getActiveUsers(Pageable pageable) {
+        Page<User> allUsers = userRepository.findAll(pageable);
+        List<User> usersActive = new ArrayList<>(); 
+        for (User user : allUsers) {
+            if(user.getActive() == true)
+                usersActive.add(user);
+        }
+        return new PageImpl<>(usersActive);
+    }
+
+    public Page<User> getDisabledUsers(Pageable pageable) {
+        Page<User> allUsers = userRepository.findAll(pageable);
+        List<User> usersDisabled = new ArrayList<>(); 
+        for (User user : allUsers) {
+            if(user.getActive() == false)
+                usersDisabled.add(user);
+        }
+        return new PageImpl<>(usersDisabled);
     }
 
     public User getUserById(Long id) {
         Optional<User> optional = userRepository.findById(id);
-        if (optional.isEmpty()) {
+        if (optional.isEmpty() || optional.get().getActive() == false) {
             throw new EntityNotFoundException("User Not Found!");
         }
         return optional.get();
@@ -109,7 +134,7 @@ public class UserService {
 
     public User getUserByUserName(String userName) {
         Optional<User> optional = userRepository.findByUsername(userName);
-        if (optional.isEmpty()) {
+        if (optional.isEmpty() || optional.get().getActive() == false) {
             throw new EntityNotFoundException("User Not Found!");
         }
         return optional.get();
@@ -161,5 +186,23 @@ public class UserService {
             }
         }
         return admin;
+    }
+
+    public void disabledUser(Long id) {
+        User baseUser = getUserById(id);
+        baseUser.setActive(false);
+        userRepository.save(baseUser);
+    }
+
+    public void activeUser(Long id) {
+        Optional<User> optional = userRepository.findById(id);
+        if (optional.isEmpty()) {
+            throw new EntityNotFoundException("User Not Found!");
+        }
+        User user = optional.get();
+        if(user.getActive() == true)
+            throw new BdException("User is Active!");
+        user.setActive(true);
+        userRepository.save(user);
     }
 }
