@@ -22,6 +22,7 @@ import eoen.jwtroles.entities.User;
 import eoen.jwtroles.exception.BdException;
 import eoen.jwtroles.exception.EntityNotFoundException;
 import eoen.jwtroles.mappers.UserMapper;
+import eoen.jwtroles.services.InitializeDataService;
 import eoen.jwtroles.services.UserService;
 
 import java.util.Set;
@@ -36,9 +37,12 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private InitializeDataService initializeDataService;
+
 	@PostConstruct
 	public void initRoleAndUser() {
-		userService.initRoleAndUser();
+		initializeDataService.initRoleAndUser();
 	}
 
 	@PostMapping({ "/postUser" })
