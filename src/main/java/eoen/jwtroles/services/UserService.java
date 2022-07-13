@@ -31,6 +31,9 @@ public class UserService {
     private RoleRepository roleRepository;
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public void initRoleAndUser() {
@@ -123,25 +126,40 @@ public class UserService {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userName = ((UserDetails) principal).getUsername();
         User userLogged = getUserByUserName(userName);
-
-        Set<Role> roles = userLogged.getRole();
-        Boolean isAdmin = false;
-        for (Role role : roles) {
-            if (role.getRoleName().equals("Admin")){
-                isAdmin = true;
-            }
-
-        }
+        Boolean isAdmin = isAdmin(userLogged.getRole());
         if (!isAdmin) {
             checkUserPassword(user, password);
-            if(userLogged.getUserId() != id)
+            if (userLogged.getUserId() != id)
                 throw new BdException("You can only change your own profile!");
         }
-        User userBase = this.getUserById(id);
+        User userBase = getUserById(id);
         user.setUserId(userBase.getUserId());
         Optional<User> userActive = userRepository.findByUsername(user.getUserName());
         if (userActive.isPresent() && userBase.getUserName() != userActive.get().getUserName())
             throw new BdException("Username already exists without bd!");
         return userRepository.save(user);
+    }
+
+    public User updateRoleToAdmin(Long id) {
+        User user = getUserById(id);
+        Set<Role> rolesUser = user.getRole();
+        Boolean admin = isAdmin(rolesUser);
+        if (admin)
+            throw new BdException("User Is Admin!");
+        rolesUser.add(roleService.getRoleById(1l));
+        user.setRole(rolesUser);
+        userRepository.save(user);
+        return user;
+
+    }
+
+    public boolean isAdmin(Set<Role> roles) {
+        Boolean admin = false;
+        for (Role role : roles) {
+            if (role.getRoleName().equals("Admin")) {
+                admin = true;
+            }
+        }
+        return admin;
     }
 }

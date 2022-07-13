@@ -18,6 +18,7 @@ import eoen.jwtroles.dtos.UserRequestDTO;
 import eoen.jwtroles.dtos.UserResponseDTO;
 import eoen.jwtroles.entities.Role;
 import eoen.jwtroles.entities.User;
+import eoen.jwtroles.exception.BdException;
 import eoen.jwtroles.exception.EntityNotFoundException;
 import eoen.jwtroles.mappers.UserMapper;
 import eoen.jwtroles.services.UserService;
@@ -31,44 +32,54 @@ import javax.validation.Valid;
 @RequestMapping("v1/user")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @PostConstruct
-    public void initRoleAndUser() {
-        userService.initRoleAndUser();
-    }
+	@PostConstruct
+	public void initRoleAndUser() {
+		userService.initRoleAndUser();
+	}
 
-    @PostMapping({"/postUser"})
-    public ResponseEntity<UserResponseDTO> postNewUser(@Valid @RequestBody UserRequestDTO dto) {
-        User userSaved = userService.postNewUser(UserMapper.fromDtoToUser(dto,null));
+	@PostMapping({ "/postUser" })
+	public ResponseEntity<UserResponseDTO> postNewUser(@Valid @RequestBody UserRequestDTO dto) {
+		User userSaved = userService.postNewUser(UserMapper.fromDtoToUser(dto, null));
 		return ResponseEntity.ok(UserMapper.fromUserToResponse(userSaved));
-    }
+	}
 
-    @GetMapping
-    @PreAuthorize("hasRole('Admin')")
+	@GetMapping
+	@PreAuthorize("hasRole('Admin')")
 	public ResponseEntity<Page<UserResponseDTO>> getAllUsers(@PageableDefault Pageable pageable) {
 		return ResponseEntity.ok(userService.getAllUsers(pageable).map(UserMapper::fromUserToResponse));
 	}
 
 	@GetMapping("{id}")
-    @PreAuthorize("hasRole('Admin')")
+	@PreAuthorize("hasRole('Admin')")
 	public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
 		User user = userService.getUserById(id);
 		return ResponseEntity.ok(UserMapper.fromUserToResponse(user));
 	}
 
 	@PutMapping("{id}")
-    @PreAuthorize("hasRole('User')")
-	public ResponseEntity<UserResponseDTO> updateRole(@Valid @RequestBody UserRequestDTO dto,
+	@PreAuthorize("hasRole('User')")
+	public ResponseEntity<UserResponseDTO> updateUser(@Valid @RequestBody UserRequestDTO dto,
 			@PathVariable Long id, String password) {
 		try {
 			Set<Role> roles = userService.getUserById(id).getRole();
-			User user = userService.updateUser(UserMapper.fromDtoToUser(dto,roles), id,password);
+			User user = userService.updateUser(UserMapper.fromDtoToUser(dto, roles), id, password);
 			return ResponseEntity.ok(UserMapper.fromUserToResponse(user));
 		} catch (RuntimeException ex) {
 			throw new EntityNotFoundException(ex.getMessage());
 		}
 	}
-}
 
+	@PutMapping({"/toAdmin/{id}"})
+	@PreAuthorize("hasRole('Admin')")
+	public ResponseEntity<UserResponseDTO> updateRoleToAdmin(@PathVariable Long id) {
+		try {
+			User user = userService.updateRoleToAdmin(id);
+			return ResponseEntity.ok(UserMapper.fromUserToResponse(user));
+		} catch (RuntimeException ex) {
+			throw new BdException(ex.getMessage());
+		}
+	}
+}
