@@ -1,5 +1,6 @@
 package eoen.jwtroles.controllers;
 
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import eoen.jwtroles.dtos.ErrorsDTO;
 import eoen.jwtroles.dtos.UserRequestDTO;
 import eoen.jwtroles.dtos.UserResponseDTO;
 import eoen.jwtroles.entities.Role;
@@ -24,6 +26,11 @@ import eoen.jwtroles.exception.EntityNotFoundException;
 import eoen.jwtroles.mappers.UserMapper;
 import eoen.jwtroles.services.InitializeDataService;
 import eoen.jwtroles.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Content;
 
 import java.util.Set;
 
@@ -45,30 +52,59 @@ public class UserController {
 		initializeDataService.initRoleAndUser();
 	}
 
+	@Operation(summary = "Post new User", description = "Route to post a new User", tags = "User")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "User created!"),
+			@ApiResponse(responseCode = "400", description = "Argument not valid!", content = @Content(schema = @Schema(implementation = ErrorsDTO.class))),
+	})
 	@PostMapping({ "/postUser" })
 	public ResponseEntity<UserResponseDTO> postNewUser(@Valid @RequestBody UserRequestDTO dto) {
 		User userSaved = userService.postNewUser(UserMapper.fromDtoToUser(dto, null));
 		return ResponseEntity.ok(UserMapper.fromUserToResponse(userSaved));
 	}
 
+	@Operation(summary = "Get Users", description = "Route to get all Users", tags = "User")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Get all users success!", content = @Content(schema = @Schema(hidden = true))),
+			@ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
+			@ApiResponse(responseCode = "500", description = "Parameter from pageable invalid!", content = @Content(schema = @Schema(hidden = true)))
+	})
 	@GetMapping()
 	@PreAuthorize("hasRole('Admin')")
-	public ResponseEntity<Page<UserResponseDTO>> getUsers(@PageableDefault Pageable pageable) {
+	public ResponseEntity<Page<UserResponseDTO>> getUsers(@ParameterObject @PageableDefault Pageable pageable) {
 		return ResponseEntity.ok(userService.getUsers(pageable).map(UserMapper::fromUserToResponse));
 	}
 
-	@GetMapping({"/active"})
+	@Operation(summary = "Get Users Active", description = "Route to get all Users Active", tags = "User")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Get all users active success!", content = @Content(schema = @Schema(hidden = true))),
+			@ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
+			@ApiResponse(responseCode = "500", description = "Parameter from pageable invalid!", content = @Content(schema = @Schema(hidden = true)))
+	})
+	@GetMapping({ "/active" })
 	@PreAuthorize("hasRole('Admin')")
-	public ResponseEntity<Page<UserResponseDTO>> getActiveUsers(@PageableDefault Pageable pageable) {
+	public ResponseEntity<Page<UserResponseDTO>> getActiveUsers(@ParameterObject @PageableDefault Pageable pageable) {
 		return ResponseEntity.ok(userService.getActiveUsers(pageable).map(UserMapper::fromUserToResponse));
 	}
 
-	@GetMapping({"/disabled"})
+	@Operation(summary = "Get Users Disabled", description = "Route to get all Users Disabled", tags = "User")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Get all users disabled success!", content = @Content(schema = @Schema(hidden = true))),
+			@ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
+			@ApiResponse(responseCode = "500", description = "Parameter from pageable invalid!", content = @Content(schema = @Schema(hidden = true)))
+	})
+	@GetMapping({ "/disabled" })
 	@PreAuthorize("hasRole('Admin')")
-	public ResponseEntity<Page<UserResponseDTO>> getDisabledUsers(@PageableDefault Pageable pageable) {
+	public ResponseEntity<Page<UserResponseDTO>> getDisabledUsers(@ParameterObject @PageableDefault Pageable pageable) {
 		return ResponseEntity.ok(userService.getDisabledUsers(pageable).map(UserMapper::fromUserToResponse));
 	}
 
+	@Operation(summary = "Get User By Id", description = "Route to get User By Id", tags = "User")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Get user by id success!"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
+			@ApiResponse(responseCode = "404", description = "User not found!", content = @Content(schema = @Schema(implementation = ErrorsDTO.class)))
+	})
 	@GetMapping("{id}")
 	@PreAuthorize("hasRole('Admin')")
 	public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
@@ -76,6 +112,13 @@ public class UserController {
 		return ResponseEntity.ok(UserMapper.fromUserToResponse(user));
 	}
 
+	@Operation(summary = "Update User", description = "Route to update User", tags = "User")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "User update!"),
+			@ApiResponse(responseCode = "400", description = "Argument not valid!", content = @Content(schema = @Schema(implementation = ErrorsDTO.class))),
+			@ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
+			@ApiResponse(responseCode = "404", description = "User not found! or UserName in use!", content = @Content(schema = @Schema(implementation = ErrorsDTO.class)))
+	})
 	@PutMapping("{id}")
 	@PreAuthorize("hasRole('User')")
 	public ResponseEntity<UserResponseDTO> updateUser(@Valid @RequestBody UserRequestDTO dto,
@@ -89,7 +132,13 @@ public class UserController {
 		}
 	}
 
-	@PutMapping({"/toAdmin/{id}"})
+	@Operation(summary = "Update Role to Admin", description = "Route to update User role to Admin", tags = "User")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "User update!"),
+			@ApiResponse(responseCode = "400", description = "Argument not valid!", content = @Content(schema = @Schema(implementation = ErrorsDTO.class))),
+			@ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true)))
+	})
+	@PutMapping({ "/toAdmin/{id}" })
 	@PreAuthorize("hasRole('Admin')")
 	public ResponseEntity<UserResponseDTO> updateRoleToAdmin(@PathVariable Long id) {
 		try {
@@ -100,12 +149,24 @@ public class UserController {
 		}
 	}
 
+	@Operation(summary = "Disable User", description = "Route to disable User", tags = "User")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "User Disabled!", content = @Content(schema = @Schema(hidden = true))),
+			@ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
+			@ApiResponse(responseCode = "404", description = "User not found!", content = @Content(schema = @Schema(implementation = ErrorsDTO.class)))
+	})
 	@DeleteMapping("{id}")
 	public ResponseEntity<UserResponseDTO> disabledUser(@PathVariable Long id) {
 		userService.disabledUser(id);
 		return ResponseEntity.ok().build();
 	}
 
+	@Operation(summary = "Active User", description = "Route to active User", tags = "User")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "User Activate!", content = @Content(schema = @Schema(hidden = true))),
+			@ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true))),
+			@ApiResponse(responseCode = "404", description = "User not found!", content = @Content(schema = @Schema(implementation = ErrorsDTO.class)))
+	})
 	@DeleteMapping("/active/{id}")
 	public ResponseEntity<UserResponseDTO> activeUser(@PathVariable Long id) {
 		userService.activeUser(id);
