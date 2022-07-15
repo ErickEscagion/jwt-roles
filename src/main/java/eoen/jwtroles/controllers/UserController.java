@@ -70,7 +70,7 @@ public class UserController {
 			@ApiResponse(responseCode = "500", description = "Parameter from pageable invalid!", content = @Content(schema = @Schema(hidden = true)))
 	})
 	@GetMapping()
-	@PreAuthorize("hasRole('Admin')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Page<UserResponseDTO>> getUsers(@ParameterObject @PageableDefault Pageable pageable) {
 		return ResponseEntity.ok(userService.getUsers(pageable).map(UserMapper::fromUserToResponse));
 	}
@@ -82,7 +82,7 @@ public class UserController {
 			@ApiResponse(responseCode = "500", description = "Parameter from pageable invalid!", content = @Content(schema = @Schema(hidden = true)))
 	})
 	@GetMapping({ "/active" })
-	@PreAuthorize("hasRole('Admin')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Page<UserResponseDTO>> getActiveUsers(@ParameterObject @PageableDefault Pageable pageable) {
 		return ResponseEntity.ok(userService.getActiveUsers(pageable).map(UserMapper::fromUserToResponse));
 	}
@@ -94,7 +94,7 @@ public class UserController {
 			@ApiResponse(responseCode = "500", description = "Parameter from pageable invalid!", content = @Content(schema = @Schema(hidden = true)))
 	})
 	@GetMapping({ "/disabled" })
-	@PreAuthorize("hasRole('Admin')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Page<UserResponseDTO>> getDisabledUsers(@ParameterObject @PageableDefault Pageable pageable) {
 		return ResponseEntity.ok(userService.getDisabledUsers(pageable).map(UserMapper::fromUserToResponse));
 	}
@@ -106,7 +106,7 @@ public class UserController {
 			@ApiResponse(responseCode = "404", description = "User not found!", content = @Content(schema = @Schema(implementation = ErrorsDTO.class)))
 	})
 	@GetMapping("{id}")
-	@PreAuthorize("hasRole('Admin')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
 		User user = userService.getUserById(id);
 		return ResponseEntity.ok(UserMapper.fromUserToResponse(user));
@@ -139,7 +139,7 @@ public class UserController {
 			@ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(hidden = true)))
 	})
 	@PutMapping({ "/toAdmin/{id}" })
-	@PreAuthorize("hasRole('Admin')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<UserResponseDTO> updateRoleToAdmin(@PathVariable Long id) {
 		try {
 			User user = userService.updateRoleToAdmin(id);

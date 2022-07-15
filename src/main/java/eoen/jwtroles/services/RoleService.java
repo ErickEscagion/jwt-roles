@@ -25,6 +25,7 @@ public class RoleService {
     private UserRepository userRepository;
 
     public Role postNewRole(Role role) {
+        role.setRoleName(role.getRoleName().toUpperCase());
         Optional<Role> roleActive = roleRepository.findByRolename(role.getRoleName());
         if (roleActive.isPresent())
             throw new BdException("roleName already exists without bd!");
@@ -69,7 +70,7 @@ public class RoleService {
             throw new BdException("Role In Use!");
         } else {
             role.setRoleId(baseRole.getRoleId());
-
+            role.setRoleName(role.getRoleName().toUpperCase());
             Optional<Role> roleActive = roleRepository.findByRolename(role.getRoleName());
             if (roleActive.isPresent() && baseRole.getRoleName() != roleActive.get().getRoleName())
                 throw new BdException("roleName already exists without bd!");

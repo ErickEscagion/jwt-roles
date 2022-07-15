@@ -37,13 +37,13 @@ public class InitializeDataService {
     private void initRoles(){
         Role adminRole = new Role();
         adminRole.setRoleId(1l);
-        adminRole.setRoleName("Admin");
+        adminRole.setRoleName("ADMIN");
         adminRole.setRoleDescription("Admin role");
         roleRepository.save(adminRole);
 
         Role userRole = new Role();
         userRole.setRoleId(2l);
-        userRole.setRoleName("User");
+        userRole.setRoleName("USER");
         userRole.setRoleDescription("User role (Default)");
         roleRepository.save(userRole);
     }

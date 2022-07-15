@@ -111,14 +111,14 @@ public class RoleControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = { "Admin" })
+    @WithMockUser(roles = { "ADMIN" })
     public void AdminGetRolesTest() throws Exception {
         mockMvc.perform(get("/v1/role"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(roles = { "Admin" })
+    @WithMockUser(roles = { "ADMIN" })
     public void AdminGetRoleByIdTest() throws Exception {
         mockMvc.perform(get("/v1/role/123")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -126,7 +126,7 @@ public class RoleControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = { "Admin" })
+    @WithMockUser(roles = { "ADMIN" })
     public void AdminPostRoleTest() throws Exception {
         mockMvc.perform(post("/v1/role")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -140,7 +140,7 @@ public class RoleControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = { "Admin" })
+    @WithMockUser(roles = { "ADMIN" })
     public void AdminDeleteRoleTest() throws Exception {
         mockMvc.perform(delete("/v1/role/123")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -148,7 +148,7 @@ public class RoleControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = { "Admin" })
+    @WithMockUser(roles = { "ADMIN" })
     public void AdminUpdateRoleTest() throws Exception {
         mockMvc.perform(put("/v1/role/123")
                 .contentType(MediaType.APPLICATION_JSON)

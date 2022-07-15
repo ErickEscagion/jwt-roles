@@ -44,7 +44,7 @@ public class UserService {
         Optional<User> userActive = userRepository.findByUsername(user.getUserName());
         if (userActive.isPresent())
             throw new BdException("userName already exists without bd!");
-        Optional<Role> roleActive = roleRepository.findByRolename("User");
+        Optional<Role> roleActive = roleRepository.findByRolename("USER");
         if (!roleActive.isPresent())
             throw new ProgramException("User role not registered, please register!");
         Role role = roleActive.get();
@@ -137,7 +137,7 @@ public class UserService {
     public boolean isAdmin(Set<Role> roles) {
         Boolean admin = false;
         for (Role role : roles) {
-            if (role.getRoleName().equals("Admin")) {
+            if (role.getRoleName().equals("ADMIN")) {
                 admin = true;
             }
         }

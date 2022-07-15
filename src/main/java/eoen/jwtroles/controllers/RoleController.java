@@ -33,7 +33,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 
 @RestController
 @RequestMapping("v1/role")
-@PreAuthorize("hasRole('Admin')")
+@PreAuthorize("hasRole('ADMIN')")
 public class RoleController {
 
 	@Autowired
