@@ -120,7 +120,7 @@ public class UserController {
 			@ApiResponse(responseCode = "404", description = "User not found! or UserName in use!", content = @Content(schema = @Schema(implementation = ErrorsDTO.class)))
 	})
 	@PutMapping("{id}")
-	@PreAuthorize("hasRole('User')")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<UserResponseDTO> updateUser(@Valid @RequestBody UserRequestDTO dto,
 			@PathVariable Long id, String password) {
 		try {
@@ -156,6 +156,7 @@ public class UserController {
 			@ApiResponse(responseCode = "404", description = "User not found!", content = @Content(schema = @Schema(implementation = ErrorsDTO.class)))
 	})
 	@DeleteMapping("{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<UserResponseDTO> disabledUser(@PathVariable Long id) {
 		userService.disabledUser(id);
 		return ResponseEntity.ok().build();
@@ -168,6 +169,7 @@ public class UserController {
 			@ApiResponse(responseCode = "404", description = "User not found!", content = @Content(schema = @Schema(implementation = ErrorsDTO.class)))
 	})
 	@DeleteMapping("/active/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<UserResponseDTO> activeUser(@PathVariable Long id) {
 		userService.activeUser(id);
 		return ResponseEntity.ok().build();
